@@ -11,6 +11,10 @@ class DateTime2Test extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $date->getDay());
         $this->assertEquals(1, $date->getMonth());
+
+        $date->setTime(1, 2, 3);
+        $date2 = new DateTime2($date);
+        $this->assertEquals($date, $date2);
     }
 
     public function testAddDay()

@@ -7,6 +7,10 @@ class DateTime2 extends \DateTime {
     static $monthes_cyrillic = ['', 'январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
 
     public function __construct($time='now', \DateTimeZone $timezone=null) {
+        if($time instanceof DateTime2) {
+            $time = $time->toStringSql(true);
+        }
+
         try {
             $tempDate = new \DateTime($time);//Строка для того, чтобы при неправильной дате вывалиться в catch и создать объект
             parent::__construct($time, $timezone);
