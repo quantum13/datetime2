@@ -1,23 +1,22 @@
 <?php
 namespace Quantum13;
 
+class DateTime2 extends \DateTime
+{
+    public static $monthes_cyrillic = ['', 'январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
 
-class DateTime2 extends \DateTime {
-
-    static $monthes_cyrillic = ['', 'январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
-
-    public function __construct($time='now', \DateTimeZone $timezone=null) {
-        if($time instanceof DateTime2) {
+    public function __construct($time='now', \DateTimeZone $timezone=null)
+    {
+        if ($time instanceof DateTime2) {
             $time = $time->toStringSql(true);
         }
 
         try {
             $tempDate = new \DateTime($time);//Строка для того, чтобы при неправильной дате вывалиться в catch и создать объект
             parent::__construct($time, $timezone);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             parent::__construct('now', $timezone);
         }
-
     }
 
     /**
@@ -25,23 +24,21 @@ class DateTime2 extends \DateTime {
      * @param int $count
      * @return $this
      */
-    public function addDay($count=1) {
-        $count_abs = abs((int) $count);
-        $interval = new \DateInterval("P{$count_abs}D");
-        if($count>0) {
-            $this->add($interval);
-        } else {
-            $this->sub($interval);
-        }
+    public function addDay($count=1)
+    {
+        $count = (int) $count;
+        $this->modify("{$count} day");
 
         return $this;
     }
 
-    public function getDay() {
+    public function getDay()
+    {
         return (int) $this->format('d');
     }
 
-    public function setDay($day) {
+    public function setDay($day)
+    {
         $this->setDate($this->format('Y'), $this->getMonth(), $day);
         return $this;
     }
@@ -51,27 +48,25 @@ class DateTime2 extends \DateTime {
      * @param int $count
      * @return $this
      */
-    public function addMonth($count=1) {
-        $count_abs = abs((int) $count);
-        $interval = new \DateInterval("P{$count_abs}M");
-        if($count>0) {
-            $this->add($interval);
-        } else {
-            $this->sub($interval);
-        }
+    public function addMonth($count=1)
+    {
+        $count = (int) $count;
+        $this->modify("{$count} month");
 
         return $this;
     }
 
-    public function getMonth($cyrillic = false) {
-        if($cyrillic) {
+    public function getMonth($cyrillic = false)
+    {
+        if ($cyrillic) {
             return self::$monthes_cyrillic[(int) $this->format('m')];
         } else {
             return (int) $this->format('m');
         }
     }
 
-    public function getYear() {
+    public function getYear()
+    {
         return (int) $this->format('Y');
     }
 
@@ -79,7 +74,8 @@ class DateTime2 extends \DateTime {
      * Установить дату на начало месяца
      * @return $this
      */
-    public function setToFirstDayOfMonth() {
+    public function setToFirstDayOfMonth()
+    {
         $this->setDate((int)$this->format('Y'), (int)$this->format('m'), 1);
 
         return $this;
@@ -89,7 +85,8 @@ class DateTime2 extends \DateTime {
      * Установить дату на конец месяца
      * @return $this
      */
-    public function setToLastDayOfMonth() {
+    public function setToLastDayOfMonth()
+    {
         $this->setDate((int)$this->format('Y'), (int)$this->format('m'), (int)$this->format('t'));
 
         return $this;
@@ -99,7 +96,8 @@ class DateTime2 extends \DateTime {
      * Является ли текущий день последним днем месяца
      * @return bool
      */
-    public function isLastDayOfMonth() {
+    public function isLastDayOfMonth()
+    {
         return (int)$this->format('t') == (int)$this->format('d');
     }
 
@@ -107,7 +105,8 @@ class DateTime2 extends \DateTime {
      * Возвращает количество дней в текущем месяце
      * @return int
      */
-    public function daysInMonth() {
+    public function daysInMonth()
+    {
         return (int)$this->format('t');
     }
 
@@ -115,8 +114,9 @@ class DateTime2 extends \DateTime {
      * Очистить время
      * @return $this
      */
-    public function clearTime() {
-        $this->setTime(0,0,0);
+    public function clearTime()
+    {
+        $this->setTime(0, 0, 0);
 
         return $this;
     }
@@ -126,7 +126,8 @@ class DateTime2 extends \DateTime {
      * @param bool $time возвращать ли время
      * @return string
      */
-    public function toStringRus($time=false) {
+    public function toStringRus($time=false)
+    {
         return $this->format('d.m.Y' . ($time?" H:i:s":""));
     }
 
@@ -135,8 +136,8 @@ class DateTime2 extends \DateTime {
      * @param bool $time возвращать ли время
      * @return string
      */
-    public function toStringSql($time=false) {
+    public function toStringSql($time=false)
+    {
         return $this->format('Y-m-d' . ($time?" H:i:s":""));
     }
-
 }
