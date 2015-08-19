@@ -5,6 +5,11 @@ class DateTime2 extends \DateTime
 {
     public static $monthes_cyrillic = ['', 'январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
 
+    //todo fail or not parameter
+    /**
+     * @param string|DateTime2 $time
+     * @param \DateTimeZone|null $timezone
+     */
     public function __construct($time='now', \DateTimeZone $timezone=null)
     {
         if ($time instanceof DateTime2) {
@@ -17,6 +22,17 @@ class DateTime2 extends \DateTime
         } catch (\Exception $e) {
             parent::__construct('now', $timezone);
         }
+    }
+
+    /**
+     * Static method for crating class
+     * @param string|DateTime2 $time
+     * @param \DateTimeZone|null $timezone
+     * @return DateTime2
+     */
+    public static function create($time='now', \DateTimeZone $timezone=null)
+    {
+        return new DateTime2($time, $timezone);
     }
 
     /**
