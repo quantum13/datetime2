@@ -119,4 +119,31 @@ class DateTime2Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2014-01-30 01:02:03', $date->toStringSql(true));
     }
 
+    public function testReplaceNow()
+    {
+        DateTime2::$manualNow = '2015-05-17 12:15:17';
+
+        $date = DateTime2::create();
+        $this->assertEquals('17.05.2015 12:15:17', $date->toStringRus(true));
+
+        $date = new DateTime2();
+        $this->assertEquals('17.05.2015 12:15:17', $date->toStringRus(true));
+
+        $date = DateTime2::create('');
+        $this->assertEquals('17.05.2015 12:15:17', $date->toStringRus(true));
+
+
+        DateTime2::$manualNow = null;
+
+        $date = DateTime2::create();
+        $this->assertNotEquals('17.05.2015 12:15:17', $date->toStringRus(true));
+
+        $date = new DateTime2();
+        $this->assertNotEquals('17.05.2015 12:15:17', $date->toStringRus(true));
+
+        $date = DateTime2::create('');
+        $this->assertNotEquals('17.05.2015 12:15:17', $date->toStringRus(true));
+
+    }
+
 }

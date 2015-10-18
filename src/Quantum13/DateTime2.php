@@ -5,6 +5,12 @@ class DateTime2 extends \DateTime
 {
     public static $monthes_cyrillic = ['', 'январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
 
+    /**
+     * If set new DateTime2() or DateTime2::create() will initialized with this date
+     * @var string|null
+     */
+    public static $manualNow = null;
+
     //todo fail or not parameter
     /**
      * @param string|DateTime2 $time
@@ -14,10 +20,12 @@ class DateTime2 extends \DateTime
     {
         if ($time instanceof DateTime2) {
             $time = $time->toStringSql(true);
+        } elseif((!$time || $time=='now') && !is_null(self::$manualNow)) {
+            $time = self::$manualNow;
         }
 
         try {
-            $tempDate = new \DateTime($time);//Строка для того, чтобы при неправильной дате вывалиться в catch и создать объект
+            new \DateTime($time);//Строка для того, чтобы при неправильной дате вывалиться в catch и создать объект
             parent::__construct($time, $timezone);
         } catch (\Exception $e) {
             parent::__construct('now', $timezone);
